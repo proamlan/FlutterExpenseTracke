@@ -62,6 +62,11 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    print("Screen Width : " + screenWidth.toString());
+    print("Screen Height : " + screenHeight.toString());
+
     var mainContent;
     if (_registeredExpenses.isNotEmpty) {
       mainContent = ExpensesList(
@@ -80,18 +85,33 @@ class _ExpensesState extends State<Expenses> {
         ],
         title: const Text("Expense"),
       ),
-      body: Column(
-        children: [
-          const SizedBox(height: 10),
-          const Text(
-            ' The charts',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18,),
-          ),
-          const SizedBox(height: 10),
-          Chart(expenses: _registeredExpenses,),
-          Expanded(child: mainContent)
-        ],
-      ),
+      body: screenWidth < screenHeight
+          ? Column(
+              children: [
+                const SizedBox(height: 10),
+                const Text(
+                  ' The charts',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Chart(
+                  expenses: _registeredExpenses,
+                ),
+                Expanded(child: mainContent)
+              ],
+            )
+          : Row(
+              children: [
+                Expanded(
+                    child: Chart(
+                  expenses: _registeredExpenses,
+                )),
+                Expanded(child: mainContent)
+              ],
+            ),
     );
   }
 }
